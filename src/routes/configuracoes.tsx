@@ -71,18 +71,18 @@ function Configuracoes() {
 
   return (
     <AppShell>
-      <div className="p-6 lg:p-8 max-w-5xl mx-auto">
-        <header className="mb-6 flex items-center justify-between">
+      <div className="p-4 lg:p-8 max-w-5xl mx-auto">
+        <header className="mb-4 lg:mb-6 flex items-center justify-between gap-3 flex-wrap">
           <div>
-            <h1 className="text-3xl lg:text-4xl font-display font-bold">Configurações</h1>
-            <p className="text-muted-foreground mt-1">Personalize sua loja e tamanhos</p>
+            <h1 className="text-2xl lg:text-4xl font-display font-bold">Configurações</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">Personalize sua loja e tamanhos</p>
           </div>
-          <Button onClick={save} className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-glow)] text-primary-foreground shadow-[var(--shadow-glow)]">
-            <Save className="h-4 w-4 mr-1" /> Salvar tudo
+          <Button onClick={save} className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-glow)] text-primary-foreground shadow-[var(--shadow-glow)] h-11">
+            <Save className="h-4 w-4 mr-1" /> Salvar
           </Button>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
           <Card className="border-0 shadow-[var(--shadow-md)]">
             <CardHeader><CardTitle className="font-display">Identidade</CardTitle></CardHeader>
             <CardContent className="space-y-4">
@@ -117,19 +117,23 @@ function Configuracoes() {
             </CardHeader>
             <CardContent className="space-y-2">
               {sizes.map((s) => (
-                <div key={s.id} className="flex items-center gap-2 p-3 rounded-xl border bg-muted/30">
-                  <Input className="flex-1" value={s.name} onChange={(e) => updateSize(s.id, { name: e.target.value })} />
-                  <div className="flex items-center gap-1">
-                    <span className="text-xs text-muted-foreground">R$</span>
-                    <Input type="number" step="0.01" className="w-24" value={s.price} onChange={(e) => updateSize(s.id, { price: parseFloat(e.target.value) || 0 })} />
+                <div key={s.id} className="p-3 rounded-xl border bg-muted/30 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <Input className="flex-1 h-10" value={s.name} onChange={(e) => updateSize(s.id, { name: e.target.value })} />
+                    <Button size="icon" variant="ghost" onClick={() => removeSize(s.id)} className="h-10 w-10 shrink-0">
+                      <Trash2 className="h-4 w-4 text-destructive" />
+                    </Button>
                   </div>
-                  <div className="flex items-center gap-2 px-2">
-                    <Switch checked={!!s.custom} onCheckedChange={(v) => updateSize(s.id, { custom: v })} />
-                    <span className="text-xs">Custom</span>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1 flex-1">
+                      <span className="text-xs text-muted-foreground">R$</span>
+                      <Input type="number" inputMode="decimal" step="0.01" className="h-10" value={s.price} onChange={(e) => updateSize(s.id, { price: parseFloat(e.target.value) || 0 })} />
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Switch checked={!!s.custom} onCheckedChange={(v) => updateSize(s.id, { custom: v })} />
+                      <span className="text-xs">Custom</span>
+                    </div>
                   </div>
-                  <Button size="icon" variant="ghost" onClick={() => removeSize(s.id)}>
-                    <Trash2 className="h-4 w-4 text-destructive" />
-                  </Button>
                 </div>
               ))}
             </CardContent>

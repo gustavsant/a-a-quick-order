@@ -95,13 +95,13 @@ function Dashboard() {
 
   return (
     <AppShell>
-      <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-        <header className="mb-6">
-          <h1 className="text-3xl lg:text-4xl font-display font-bold">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Análise das vendas pagas</p>
+      <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+        <header className="mb-4 lg:mb-6">
+          <h1 className="text-2xl lg:text-4xl font-display font-bold">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Análise das vendas pagas</p>
         </header>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
           <StatCard label="Hoje" value={formatBRL(stats.today)} accent />
           <StatCard label="Últimos 7 dias" value={formatBRL(stats.week)} />
           <StatCard label="Mês atual" value={formatBRL(stats.month)} />
@@ -171,10 +171,10 @@ function Dashboard() {
 function StatCard({ label, value, sub, accent }: { label: string; value: string; sub?: string; accent?: boolean }) {
   return (
     <Card className={`border-0 ${accent ? "text-white" : ""}`} style={accent ? { background: "var(--gradient-hero)" } : undefined}>
-      <CardContent className="p-5">
-        <div className={`text-xs uppercase tracking-wide ${accent ? "text-white/80" : "text-muted-foreground"}`}>{label}</div>
-        <div className="font-display font-bold text-2xl mt-1">{value}</div>
-        {sub && <div className={`text-sm mt-1 ${accent ? "text-white/70" : "text-muted-foreground"}`}>{sub}</div>}
+      <CardContent className="p-3 lg:p-5">
+        <div className={`text-[10px] lg:text-xs uppercase tracking-wide ${accent ? "text-white/80" : "text-muted-foreground"}`}>{label}</div>
+        <div className="font-display font-bold text-xl lg:text-2xl mt-1 leading-tight">{value}</div>
+        {sub && <div className={`text-xs mt-1 ${accent ? "text-white/70" : "text-muted-foreground"}`}>{sub}</div>}
       </CardContent>
     </Card>
   );
