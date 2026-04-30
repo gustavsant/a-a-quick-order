@@ -171,10 +171,10 @@ function Dashboard() {
 function StatCard({ label, value, sub, accent }: { label: string; value: string; sub?: string; accent?: boolean }) {
   return (
     <Card className={`border-0 ${accent ? "text-white" : ""}`} style={accent ? { background: "var(--gradient-hero)" } : undefined}>
-      <CardContent className="p-5">
-        <div className={`text-xs uppercase tracking-wide ${accent ? "text-white/80" : "text-muted-foreground"}`}>{label}</div>
-        <div className="font-display font-bold text-2xl mt-1">{value}</div>
-        {sub && <div className={`text-sm mt-1 ${accent ? "text-white/70" : "text-muted-foreground"}`}>{sub}</div>}
+      <CardContent className="p-3 lg:p-5">
+        <div className={`text-[10px] lg:text-xs uppercase tracking-wide ${accent ? "text-white/80" : "text-muted-foreground"}`}>{label}</div>
+        <div className="font-display font-bold text-xl lg:text-2xl mt-1 leading-tight">{value}</div>
+        {sub && <div className={`text-xs mt-1 ${accent ? "text-white/70" : "text-muted-foreground"}`}>{sub}</div>}
       </CardContent>
     </Card>
   );
