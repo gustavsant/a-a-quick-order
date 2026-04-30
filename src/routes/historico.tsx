@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { Search, Printer, CheckCircle2, Clock, Trash2 } from "lucide-react";
+import { Search, Printer, CheckCircle2, Clock, Trash2, Filter } from "lucide-react";
 import { AppShell } from "@/components/AppShell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -28,6 +28,7 @@ function Historico() {
   const [status, setStatus] = useState<"all" | OrderStatus>("all");
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [showFilters, setShowFilters] = useState(false);
 
   const filtered = useMemo(() => {
     return orders.filter((o) => {
@@ -58,50 +59,62 @@ function Historico() {
 
   return (
     <AppShell>
-      <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-        <header className="mb-6">
-          <h1 className="text-3xl lg:text-4xl font-display font-bold">Histórico</h1>
-          <p className="text-muted-foreground mt-1">{filtered.length} comanda(s) · {formatBRL(totalSum)}</p>
+      <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+        <header className="mb-4 lg:mb-6">
+          <h1 className="text-2xl lg:text-4xl font-display font-bold">Histórico</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">{filtered.length} comanda(s) · {formatBRL(totalSum)}</p>
         </header>
 
-        <Card className="mb-6 border-0 shadow-[var(--shadow-md)]">
-          <CardContent className="p-4 grid grid-cols-1 md:grid-cols-4 gap-3">
-            <div className="relative md:col-span-2">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input className="pl-9" placeholder="Buscar por nome ou nº..." value={q} onChange={(e) => setQ(e.target.value)} />
-            </div>
-            <Select value={status} onValueChange={(v) => setStatus(v as typeof status)}>
-              <SelectTrigger><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos</SelectItem>
-                <SelectItem value="pending">Pendentes</SelectItem>
-                <SelectItem value="paid">Pagos</SelectItem>
-              </SelectContent>
-            </Select>
+        {/* Busca sempre visível, filtros toggle no mobile */}
+        <Card className="mb-4 border-0 shadow-[var(--shadow-md)]">
+          <CardContent className="p-3 lg:p-4 space-y-2">
             <div className="flex gap-2">
-              <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
-              <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input className="pl-9 h-11" placeholder="Buscar nome ou nº..." value={q} onChange={(e) => setQ(e.target.value)} />
+              </div>
+              <Button variant="outline" size="icon" className="h-11 w-11 lg:hidden" onClick={() => setShowFilters((v) => !v)} aria-label="Filtros">
+                <Filter className="h-4 w-4" />
+              </Button>
+            </div>
+            <div className={`${showFilters ? "grid" : "hidden"} lg:grid grid-cols-1 sm:grid-cols-3 gap-2`}>
+              <Select value={status} onValueChange={(v) => setStatus(v as typeof status)}>
+                <SelectTrigger className="h-11"><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Todos</SelectItem>
+                  <SelectItem value="pending">Pendentes</SelectItem>
+                  <SelectItem value="paid">Pagos</SelectItem>
+                </SelectContent>
+              </Select>
+              <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="h-11" />
+              <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} className="h-11" />
             </div>
           </CardContent>
         </Card>
 
         <div className="space-y-3">
           {filtered.length === 0 && (
-            <Card className="border-dashed"><CardContent className="p-12 text-center text-muted-foreground">Nenhuma comanda encontrada.</CardContent></Card>
+            <Card className="border-dashed"><CardContent className="p-10 text-center text-muted-foreground text-sm">Nenhuma comanda encontrada.</CardContent></Card>
           )}
           {filtered.map((o) => (
             <Card key={o.id} className="border-0 shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition">
-              <CardContent className="p-4 flex items-center gap-4 flex-wrap">
-                <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-glow)] text-primary-foreground flex items-center justify-center font-display font-bold text-sm shadow-[var(--shadow-glow)]">
-                  #{o.number}
-                </div>
-                <div className="flex-1 min-w-[180px]">
-                  <div className="font-semibold">{o.customerName || "Sem nome"}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {new Date(o.createdAt).toLocaleString("pt-BR")} · {o.items.length} item(ns)
+              <CardContent className="p-3 lg:p-4">
+                {/* Topo: número + nome/data + total */}
+                <div className="flex items-center gap-3">
+                  <div className="h-12 w-12 lg:h-14 lg:w-14 rounded-2xl bg-gradient-to-br from-[var(--primary)] to-[var(--primary-glow)] text-primary-foreground flex items-center justify-center font-display font-bold text-xs lg:text-sm shadow-[var(--shadow-glow)] shrink-0">
+                    #{o.number}
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="font-semibold truncate">{o.customerName || "Sem nome"}</div>
+                    <div className="text-[11px] lg:text-xs text-muted-foreground truncate">
+                      {new Date(o.createdAt).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })} · {o.items.length} item(ns)
+                    </div>
+                  </div>
+                  <div className="font-display font-bold text-lg lg:text-xl text-primary text-right whitespace-nowrap">{formatBRL(o.total)}</div>
                 </div>
-                <div className="flex items-center gap-2">
+
+                {/* Status + ações */}
+                <div className="flex items-center gap-2 mt-3 flex-wrap">
                   {o.status === "paid" ? (
                     <Badge className="bg-[color:var(--success)] text-[color:var(--success-foreground)] border-0">
                       <CheckCircle2 className="h-3 w-3 mr-1" /> {o.paymentMethod ? PAYMENT_LABELS[o.paymentMethod] : "Pago"}
@@ -111,12 +124,10 @@ function Historico() {
                       <Clock className="h-3 w-3 mr-1" /> Pendente
                     </Badge>
                   )}
-                </div>
-                <div className="font-display font-bold text-xl text-primary w-28 text-right">{formatBRL(o.total)}</div>
-                <div className="flex gap-1">
+                  <div className="flex-1" />
                   {o.status === "pending" && (
                     <Select onValueChange={(v) => markPaid(o.id, v as PaymentMethod)}>
-                      <SelectTrigger className="w-32 h-9"><SelectValue placeholder="Marcar pago" /></SelectTrigger>
+                      <SelectTrigger className="w-[130px] h-10"><SelectValue placeholder="Marcar pago" /></SelectTrigger>
                       <SelectContent>
                         {(Object.keys(PAYMENT_LABELS) as PaymentMethod[]).map((m) => (
                           <SelectItem key={m} value={m}>{PAYMENT_LABELS[m]}</SelectItem>
@@ -124,10 +135,10 @@ function Historico() {
                       </SelectContent>
                     </Select>
                   )}
-                  <Button asChild size="icon" variant="outline">
+                  <Button asChild size="icon" variant="outline" className="h-10 w-10">
                     <Link to="/imprimir/$id" params={{ id: o.id }}><Printer className="h-4 w-4" /></Link>
                   </Button>
-                  <Button size="icon" variant="ghost" onClick={() => remove(o.id)}>
+                  <Button size="icon" variant="ghost" onClick={() => remove(o.id)} className="h-10 w-10">
                     <Trash2 className="h-4 w-4 text-destructive" />
                   </Button>
                 </div>
