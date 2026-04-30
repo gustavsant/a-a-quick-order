@@ -71,18 +71,18 @@ function Configuracoes() {
 
   return (
     <AppShell>
-      <div className="p-6 lg:p-8 max-w-5xl mx-auto">
-        <header className="mb-6 flex items-center justify-between">
+      <div className="p-4 lg:p-8 max-w-5xl mx-auto">
+        <header className="mb-4 lg:mb-6 flex items-center justify-between gap-3 flex-wrap">
           <div>
-            <h1 className="text-3xl lg:text-4xl font-display font-bold">Configurações</h1>
-            <p className="text-muted-foreground mt-1">Personalize sua loja e tamanhos</p>
+            <h1 className="text-2xl lg:text-4xl font-display font-bold">Configurações</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">Personalize sua loja e tamanhos</p>
           </div>
-          <Button onClick={save} className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-glow)] text-primary-foreground shadow-[var(--shadow-glow)]">
-            <Save className="h-4 w-4 mr-1" /> Salvar tudo
+          <Button onClick={save} className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-glow)] text-primary-foreground shadow-[var(--shadow-glow)] h-11">
+            <Save className="h-4 w-4 mr-1" /> Salvar
           </Button>
         </header>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-6">
           <Card className="border-0 shadow-[var(--shadow-md)]">
             <CardHeader><CardTitle className="font-display">Identidade</CardTitle></CardHeader>
             <CardContent className="space-y-4">
