@@ -95,13 +95,13 @@ function Dashboard() {
 
   return (
     <AppShell>
-      <div className="p-6 lg:p-8 max-w-7xl mx-auto">
-        <header className="mb-6">
-          <h1 className="text-3xl lg:text-4xl font-display font-bold">Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Análise das vendas pagas</p>
+      <div className="p-4 lg:p-8 max-w-7xl mx-auto">
+        <header className="mb-4 lg:mb-6">
+          <h1 className="text-2xl lg:text-4xl font-display font-bold">Dashboard</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Análise das vendas pagas</p>
         </header>
 
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 lg:gap-4 mb-4 lg:mb-6">
           <StatCard label="Hoje" value={formatBRL(stats.today)} accent />
           <StatCard label="Últimos 7 dias" value={formatBRL(stats.week)} />
           <StatCard label="Mês atual" value={formatBRL(stats.month)} />
