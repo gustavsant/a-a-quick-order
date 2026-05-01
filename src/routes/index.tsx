@@ -35,7 +35,7 @@ function NovaComanda() {
   const [notes, setNotes] = useState("");
   const [items, setItems] = useState<OrderItem[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | undefined>();
-  const [waOpen, setWaOpen] = useState(false);
+  const [waOpen, setWaOpen] = useState(true);
 
   useEffect(() => {
     try {
