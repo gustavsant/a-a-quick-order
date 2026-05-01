@@ -1,5 +1,5 @@
 export type PaymentMethod = "pix" | "card" | "cash";
-export type OrderStatus = "pending" | "paid";
+export type OrderStatus = "pending" | "paid" | "cancelled";
 
 export interface AcaiSize {
   id: string;

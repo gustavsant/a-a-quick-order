@@ -1,9 +1,10 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Plus, History, Settings as SettingsIcon, Sparkles } from "lucide-react";
+import { LayoutDashboard, Plus, History, Settings as SettingsIcon, Sparkles, Inbox } from "lucide-react";
 import { useSettings } from "@/lib/storage";
 
 const items = [
   { to: "/", label: "Nova", icon: Plus },
+  { to: "/abertas", label: "Abertas", icon: Inbox },
   { to: "/historico", label: "Histórico", icon: History },
   { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/configuracoes", label: "Config", icon: SettingsIcon },
@@ -68,7 +69,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="flex-1 pb-20 lg:pb-0">{children}</div>
 
         {/* Mobile bottom nav */}
-        <nav className="no-print lg:hidden fixed bottom-0 inset-x-0 z-40 bg-sidebar text-sidebar-foreground border-t border-sidebar-border grid grid-cols-4 pb-[env(safe-area-inset-bottom)]">
+        <nav className="no-print lg:hidden fixed bottom-0 inset-x-0 z-40 bg-sidebar text-sidebar-foreground border-t border-sidebar-border grid grid-cols-5 pb-[env(safe-area-inset-bottom)]">
           {items.map((it) => {
             const active = path === it.to;
             const Icon = it.icon;
@@ -82,8 +83,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     : "text-sidebar-foreground/60"
                 }`}
               >
-                <div className={`h-9 w-12 rounded-xl flex items-center justify-center transition ${active ? "bg-gradient-to-br from-[var(--primary-glow)] to-[var(--primary)] shadow-[var(--shadow-glow)]" : ""}`}>
-                  <Icon className="h-5 w-5" />
+                <div className={`h-9 w-10 rounded-xl flex items-center justify-center transition ${active ? "bg-gradient-to-br from-[var(--primary-glow)] to-[var(--primary)] shadow-[var(--shadow-glow)]" : ""}`}>
+                  <Icon className="h-4.5 w-4.5" />
                 </div>
                 {it.label}
               </Link>

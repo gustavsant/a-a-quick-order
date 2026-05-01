@@ -84,6 +84,7 @@ function Historico() {
                   <SelectItem value="all">Todos</SelectItem>
                   <SelectItem value="pending">Pendentes</SelectItem>
                   <SelectItem value="paid">Pagos</SelectItem>
+                  <SelectItem value="cancelled">Cancelados</SelectItem>
                 </SelectContent>
               </Select>
               <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} className="h-11" />
@@ -118,6 +119,10 @@ function Historico() {
                   {o.status === "paid" ? (
                     <Badge className="bg-[color:var(--success)] text-[color:var(--success-foreground)] border-0">
                       <CheckCircle2 className="h-3 w-3 mr-1" /> {o.paymentMethod ? PAYMENT_LABELS[o.paymentMethod] : "Pago"}
+                    </Badge>
+                  ) : o.status === "cancelled" ? (
+                    <Badge variant="outline" className="text-orange-600 border-orange-300 bg-orange-50">
+                      Cancelada
                     </Badge>
                   ) : (
                     <Badge variant="outline" className="text-[color:var(--warning-foreground)] border-[color:var(--warning)] bg-[color:var(--warning)]/20">
