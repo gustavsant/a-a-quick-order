@@ -11,17 +11,17 @@ interface Props {
 export const Receipt = forwardRef<HTMLDivElement, Props>(({ order, settings }, ref) => {
   const date = new Date(order.createdAt);
   return (
-    <div ref={ref} className="print-receipt bg-white text-black mx-auto" style={{ width: "58mm", padding: "2mm", fontFamily: "'Courier New', monospace", fontSize: 11, lineHeight: 1.35 }}>
+    <div ref={ref} className="print-receipt bg-white text-black mx-auto" style={{ width: "58mm", padding: "2mm", fontFamily: "'Courier New', monospace", fontSize: 15, lineHeight: 1.4, fontWeight: 700, color: "#000" }}>
       {settings.logoDataUrl && (
         <div style={{ textAlign: "center", marginBottom: 4 }}>
           <img src={settings.logoDataUrl} alt="logo" style={{ maxWidth: "40mm", maxHeight: "20mm", display: "inline-block" }} />
         </div>
       )}
-      <div style={{ textAlign: "center", fontWeight: 700, fontSize: 13 }}>{settings.storeName}</div>
-      <div style={{ textAlign: "center", fontSize: 10 }}>
+      <div style={{ textAlign: "center", fontWeight: 900, fontSize: 18 }}>{settings.storeName}</div>
+      <div style={{ textAlign: "center", fontSize: 13, fontWeight: 700 }}>
         {date.toLocaleDateString("pt-BR")} {date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
       </div>
-      <div style={{ textAlign: "center", fontWeight: 700, marginTop: 4 }}>COMANDA #{order.number}</div>
+      <div style={{ textAlign: "center", fontWeight: 900, marginTop: 4, fontSize: 17 }}>COMANDA #{order.number}</div>
       <Divider />
       {order.customerName && (
         <>
@@ -29,18 +29,18 @@ export const Receipt = forwardRef<HTMLDivElement, Props>(({ order, settings }, r
           <Divider />
         </>
       )}
-      <div style={{ fontWeight: 700, marginBottom: 2 }}>ITENS</div>
+      <div style={{ fontWeight: 900, marginBottom: 2, fontSize: 16 }}>ITENS</div>
       {order.items.map((it) => (
-        <div key={it.id} style={{ marginBottom: 2 }}>
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <div key={it.id} style={{ marginBottom: 4 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700 }}>
             <span style={{ flex: 1, paddingRight: 4 }}>{it.qty}x {it.name}</span>
             <span>{formatBRL(it.qty * it.unitPrice)}</span>
           </div>
-          {it.notes && <div style={{ fontSize: 10, fontStyle: "italic", paddingLeft: 8 }}>↳ {it.notes}</div>}
+          {it.notes && <div style={{ fontSize: 13, fontStyle: "italic", paddingLeft: 8, fontWeight: 700 }}>↳ {it.notes}</div>}
         </div>
       ))}
       <Divider />
-      <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 700, fontSize: 13 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", fontWeight: 900, fontSize: 18 }}>
         <span>TOTAL</span><span>{formatBRL(order.total)}</span>
       </div>
       {order.paymentMethod && (
@@ -56,8 +56,8 @@ export const Receipt = forwardRef<HTMLDivElement, Props>(({ order, settings }, r
       {order.whatsappText && (
         <>
           <Divider />
-          <div style={{ fontWeight: 700 }}>Pedido original:</div>
-          <div style={{ whiteSpace: "pre-wrap", fontSize: 10 }}>{order.whatsappText}</div>
+          <div style={{ fontWeight: 900 }}>Pedido original:</div>
+          <div style={{ whiteSpace: "pre-wrap", fontSize: 13, fontWeight: 700 }}>{order.whatsappText}</div>
         </>
       )}
       {settings.footerText && (
