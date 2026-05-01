@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as HistoricoRouteImport } from './routes/historico'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
+import { Route as AbertasRouteImport } from './routes/abertas'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ImprimirIdRouteImport } from './routes/imprimir.$id'
 
@@ -30,6 +31,11 @@ const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
   path: '/configuracoes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AbertasRoute = AbertasRouteImport.update({
+  id: '/abertas',
+  path: '/abertas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -43,6 +49,7 @@ const ImprimirIdRoute = ImprimirIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abertas': typeof AbertasRoute
   '/configuracoes': typeof ConfiguracoesRoute
   '/dashboard': typeof DashboardRoute
   '/historico': typeof HistoricoRoute
@@ -50,6 +57,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/abertas': typeof AbertasRoute
   '/configuracoes': typeof ConfiguracoesRoute
   '/dashboard': typeof DashboardRoute
   '/historico': typeof HistoricoRoute
@@ -58,6 +66,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/abertas': typeof AbertasRoute
   '/configuracoes': typeof ConfiguracoesRoute
   '/dashboard': typeof DashboardRoute
   '/historico': typeof HistoricoRoute
@@ -67,15 +76,23 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/abertas'
     | '/configuracoes'
     | '/dashboard'
     | '/historico'
     | '/imprimir/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/configuracoes' | '/dashboard' | '/historico' | '/imprimir/$id'
+  to:
+    | '/'
+    | '/abertas'
+    | '/configuracoes'
+    | '/dashboard'
+    | '/historico'
+    | '/imprimir/$id'
   id:
     | '__root__'
     | '/'
+    | '/abertas'
     | '/configuracoes'
     | '/dashboard'
     | '/historico'
@@ -84,6 +101,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbertasRoute: typeof AbertasRoute
   ConfiguracoesRoute: typeof ConfiguracoesRoute
   DashboardRoute: typeof DashboardRoute
   HistoricoRoute: typeof HistoricoRoute
@@ -113,6 +131,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ConfiguracoesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/abertas': {
+      id: '/abertas'
+      path: '/abertas'
+      fullPath: '/abertas'
+      preLoaderRoute: typeof AbertasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -132,6 +157,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbertasRoute: AbertasRoute,
   ConfiguracoesRoute: ConfiguracoesRoute,
   DashboardRoute: DashboardRoute,
   HistoricoRoute: HistoricoRoute,
