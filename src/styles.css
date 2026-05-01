@@ -199,8 +199,15 @@
     padding: 2mm;
     color: black !important;
     font-family: "Courier New", monospace;
-    font-size: 11px;
-    line-height: 1.35;
+    font-size: 15px;
+    line-height: 1.4;
+    font-weight: 700;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print-receipt * {
+    color: black !important;
+    font-weight: 700 !important;
   }
   .no-print { display: none !important; }
 }
