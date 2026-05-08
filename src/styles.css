@@ -155,7 +155,7 @@
 }
 
 @layer base {
-  aside {
+  #lovable-badge {
     display: none !important;
   }
   
