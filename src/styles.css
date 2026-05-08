@@ -4,10 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-aside {
-   display: none;
-}
-
 /*
  * Design system definition.
  *
