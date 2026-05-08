@@ -4,9 +4,6 @@
 
 @custom-variant dark (&:is(.dark *));
 
-#lovable-badge-cta, #lovable-badge {
-  display: none;
-}
 
 /*
  * Design system definition.
