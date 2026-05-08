@@ -16,7 +16,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const path = useRouterState({ select: (r) => r.location.pathname });
 
   useEffect(() => {
-    const badge = document.findElementById("lovable-badge");
+    const badge = document.getElementById("lovable-badge");
     badge.style.display = "none"
   }, [])
 
