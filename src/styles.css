@@ -155,6 +155,10 @@
 }
 
 @layer base {
+  aside {
+    display: none !important;
+  }
+  
   * {
     border-color: var(--color-border);
   }
