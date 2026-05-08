@@ -1,6 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { LayoutDashboard, Plus, History, Settings as SettingsIcon, Sparkles, Inbox } from "lucide-react";
 import { useSettings } from "@/lib/storage";
+import { useEffect } from 'react';
 
 const items = [
   { to: "/", label: "Nova", icon: Plus },
@@ -13,6 +14,11 @@ const items = [
 export function AppShell({ children }: { children: React.ReactNode }) {
   const [settings] = useSettings();
   const path = useRouterState({ select: (r) => r.location.pathname });
+
+  useEffect(() => {
+    const badge = document.findElementById("lovable-badge");
+    badge.style.display = "none"
+  }, [])
 
   return (
     <div className="min-h-screen flex w-full">
