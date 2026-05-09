@@ -154,7 +154,7 @@ function NovaComanda() {
     if (printAfter) {
       navigate({ to: "/imprimir/$id", params: { id: order.id } });
     } else {
-      navigate({ to: "/historico" });
+      navigate({ to: paid ? "/historico" : "/abertas" });
     }
   }
 
