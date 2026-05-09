@@ -220,17 +220,6 @@ function DetailsBody({
         <Receipt order={order} settings={settings} />
       </div>
 
-      <div>
-        <div className="text-xs uppercase tracking-wide text-muted-foreground mb-2">Marcar como pago</div>
-        <div className="grid grid-cols-3 gap-2">
-          {(Object.keys(PAYMENT_LABELS) as PaymentMethod[]).map((m) => (
-            <Button key={m} onClick={() => onMarkPaid(m)} className="h-11 bg-[color:var(--success)] text-[color:var(--success-foreground)] hover:opacity-90">
-              {PAYMENT_LABELS[m]}
-            </Button>
-          ))}
-        </div>
-      </div>
-
       <div className="grid grid-cols-2 gap-2">
         <Button variant="outline" onClick={onCancel} className="h-11 text-orange-600 border-orange-300">
           <XCircle className="h-4 w-4 mr-1" /> Cancelar
