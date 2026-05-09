@@ -370,19 +370,6 @@ function NovaComanda() {
               <div className="text-[10px] opacity-80 uppercase tracking-wide leading-none">Total</div>
               <div className="font-display font-bold text-2xl leading-tight mt-0.5">{formatBRL(total)}</div>
             </div>
-            <div className="flex gap-2">
-              {(Object.keys(PAYMENT_LABELS) as PaymentMethod[]).map((m) => (
-                <button
-                  key={m}
-                  onClick={() => setPaymentMethod(m)}
-                  className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition ${
-                    paymentMethod === m ? "bg-white text-primary" : "bg-white/15 text-white"
-                  }`}
-                >
-                  {PAYMENT_LABELS[m]}
-                </button>
-              ))}
-            </div>
           </div>
           <div className="grid grid-cols-2 gap-2 mt-2.5">
             <Button onClick={() => save(false, false)} variant="secondary" className="bg-white/15 text-white hover:bg-white/25 border-0 h-11">
