@@ -17,7 +17,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const badge = document.getElementById("lovable-badge");
-    badge.style.display = "none"
+    if (badge) badge.style.display = "none";
   }, [])
 
   return (
