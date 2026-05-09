@@ -221,9 +221,6 @@ function NovaComanda() {
                       value={whatsappText}
                       onChange={(e) => setWhatsappText(e.target.value)}
                     />
-                    <Button size="sm" variant="secondary" onClick={importFromText} className="w-full">
-                      Extrair itens do texto
-                    </Button>
                   </div>
                 )}
               </CardContent>
