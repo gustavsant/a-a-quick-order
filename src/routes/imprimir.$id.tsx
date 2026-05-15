@@ -4,6 +4,7 @@ import { ArrowLeft, Download } from "lucide-react";
 import { useOrders, useSettings } from "@/lib/storage";
 import { Receipt } from "@/components/Receipt";
 import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/imprimir/$id")({
   head: () => ({
@@ -31,11 +32,38 @@ function ImprimirPage() {
         import("html2canvas"),
         import("jspdf"),
       ]);
-      const canvas = await html2canvas(receiptRef.current, {
-        scale: 3,
-        backgroundColor: "#ffffff",
-      });
-      // 58mm width receipt; height proportional
+
+      // Clone the receipt into a detached container with safe colors,
+      // because html2canvas v1 cannot parse modern CSS color functions
+      // (oklch, color-mix) used by the app's design tokens.
+      const source = receiptRef.current;
+      const wrapper = document.createElement("div");
+      wrapper.style.position = "fixed";
+      wrapper.style.left = "-10000px";
+      wrapper.style.top = "0";
+      wrapper.style.background = "#ffffff";
+      wrapper.style.color = "#000000";
+      wrapper.style.padding = "0";
+      wrapper.style.margin = "0";
+      const clone = source.cloneNode(true) as HTMLElement;
+      // Force safe colors on clone subtree
+      clone.style.background = "#ffffff";
+      clone.style.color = "#000000";
+      wrapper.appendChild(clone);
+      document.body.appendChild(wrapper);
+
+      let canvas: HTMLCanvasElement;
+      try {
+        canvas = await html2canvas(clone, {
+          scale: 3,
+          backgroundColor: "#ffffff",
+          logging: false,
+          useCORS: true,
+        });
+      } finally {
+        document.body.removeChild(wrapper);
+      }
+
       const widthMm = 58;
       const heightMm = (canvas.height / canvas.width) * widthMm;
       const pdf = new jsPDF({
@@ -46,6 +74,10 @@ function ImprimirPage() {
       const imgData = canvas.toDataURL("image/png");
       pdf.addImage(imgData, "PNG", 0, 0, widthMm, heightMm);
       pdf.save(`comanda-${order.number}.pdf`);
+      toast.success("PDF gerado");
+    } catch (err) {
+      console.error("PDF generation failed:", err);
+      toast.error("Falha ao gerar PDF: " + (err instanceof Error ? err.message : String(err)));
     } finally {
       setGenerating(false);
     }
@@ -54,7 +86,7 @@ function ImprimirPage() {
   useEffect(() => {
     if (!order || generatedRef.current) return;
     generatedRef.current = true;
-    const t = setTimeout(() => generatePdf(), 400);
+    const t = setTimeout(() => generatePdf(), 500);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
