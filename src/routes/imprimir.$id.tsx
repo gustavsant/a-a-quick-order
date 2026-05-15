@@ -1,13 +1,13 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef } from "react";
-import { ArrowLeft, Printer } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ArrowLeft, Download } from "lucide-react";
 import { useOrders, useSettings } from "@/lib/storage";
 import { Receipt } from "@/components/Receipt";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/imprimir/$id")({
   head: () => ({
-    meta: [{ title: "Imprimir Comanda" }],
+    meta: [{ title: "Comanda PDF" }],
   }),
   component: ImprimirPage,
 });
@@ -17,15 +17,46 @@ function ImprimirPage() {
   const [orders] = useOrders();
   const [settings] = useSettings();
   const navigate = useNavigate();
-  const printedRef = useRef(false);
+  const receiptRef = useRef<HTMLDivElement>(null);
+  const generatedRef = useRef(false);
+  const [generating, setGenerating] = useState(false);
 
   const order = useMemo(() => orders.find((o) => o.id === id), [orders, id]);
 
+  async function generatePdf() {
+    if (!receiptRef.current || !order) return;
+    setGenerating(true);
+    try {
+      const [{ default: html2canvas }, { default: jsPDF }] = await Promise.all([
+        import("html2canvas"),
+        import("jspdf"),
+      ]);
+      const canvas = await html2canvas(receiptRef.current, {
+        scale: 3,
+        backgroundColor: "#ffffff",
+      });
+      // 58mm width receipt; height proportional
+      const widthMm = 58;
+      const heightMm = (canvas.height / canvas.width) * widthMm;
+      const pdf = new jsPDF({
+        unit: "mm",
+        format: [widthMm, heightMm],
+        orientation: "portrait",
+      });
+      const imgData = canvas.toDataURL("image/png");
+      pdf.addImage(imgData, "PNG", 0, 0, widthMm, heightMm);
+      pdf.save(`comanda-${order.number}.pdf`);
+    } finally {
+      setGenerating(false);
+    }
+  }
+
   useEffect(() => {
-    if (!order || printedRef.current) return;
-    printedRef.current = true;
-    const t = setTimeout(() => window.print(), 350);
+    if (!order || generatedRef.current) return;
+    generatedRef.current = true;
+    const t = setTimeout(() => generatePdf(), 400);
     return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [order]);
 
   if (!order) {
@@ -41,16 +72,20 @@ function ImprimirPage() {
 
   return (
     <div className="min-h-screen bg-muted/40 p-8">
-      <div className="no-print max-w-md mx-auto mb-6 flex items-center justify-between">
+      <div className="max-w-md mx-auto mb-6 flex items-center justify-between">
         <Button variant="outline" onClick={() => navigate({ to: "/historico" })}>
           <ArrowLeft className="h-4 w-4 mr-1" /> Histórico
         </Button>
-        <Button onClick={() => window.print()} className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-glow)] text-primary-foreground">
-          <Printer className="h-4 w-4 mr-1" /> Imprimir novamente
+        <Button
+          onClick={generatePdf}
+          disabled={generating}
+          className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary-glow)] text-primary-foreground"
+        >
+          <Download className="h-4 w-4 mr-1" /> {generating ? "Gerando..." : "Baixar PDF"}
         </Button>
       </div>
       <div className="max-w-md mx-auto bg-white shadow-[var(--shadow-lg)] rounded-xl p-4">
-        <Receipt order={order} settings={settings} />
+        <Receipt ref={receiptRef} order={order} settings={settings} />
       </div>
     </div>
   );
